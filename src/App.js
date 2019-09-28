@@ -1,9 +1,9 @@
 import React from "react";
 import Form from "./components/Form";
-import News from "./components/News";
 import QueryWindow from "./components/QueryWindow";
 import axios from "axios";
-// import { Spring } from 'react-spring/renderprops'
+import { Spring } from "react-spring/renderprops";
+import DatatablePage from "./components/DataTablePage"
 
 class App extends React.Component {
   state = {
@@ -17,31 +17,79 @@ class App extends React.Component {
     url: undefined,
     urlToImage: undefined,
     error: undefined,
-
+  
   };
 
-  deleteQuery = () => {
-    
-  }
 
   getNews = async e => {
-    e.preventDefault();
 
-    var headers = {
-      Authorization: "bf46b4b6cf2944809ec6c175982b259b"
+    this.data = {
+      columns: [
+        {
+          label: "Published at",
+          field: "date",
+          sort: "asc",
+          width: 270
+        },
+        {
+          label: "Author",
+          field: "author",
+          sort: "asc",
+          width: 270
+        },
+        {
+          label: "Title",
+          field: "title",
+          sort: "asc",
+          width: 150
+        }
+      ],
+      rows: []
     };
-    var searchQuery = e.target[0].value;
-    var url = `https://newsapi.org/v2/everything?q=${searchQuery}`;
-    var dataReiceived;
+
+
+    e.preventDefault();
+    let headers = {
+      Authorization: "d137b326c612435e93c08624f36e5bd4"
+    };
+    let searchQuery = e.target[0].value;
+    let pageSize = 100; // <-- Max allowed articles per page
+    let pagesToLoop = 5000 / pageSize; // <-- Article loop length
+    // let url = `https://newsapi.org/v2/everything?p=2&pageSize=${pageSize}&q=${searchQuery}`;
+        let url = `https://newsapi.org/v2/everything?q=${searchQuery}`;
+
+    let massJSON = [];
 
     await axios
       .get(url, {
-        headers: headers,
-        data: dataReiceived
+        headers: headers
       })
       .then(response => {
-        console.log(response.data.articles);
-        console.log(searchQuery);
+        // for (let k = 0; k < pagesToLoop; k++) {
+          console.log(response);
+          console.log(response.data.articles);
+          let arr1 = [...response.data.articles];
+          let arr = [];
+          console.log("arr1 below");
+          console.log(arr1);
+          arr1.map((item, index) => {
+            arr[index] = [];
+            arr[index].push(item.author);
+            arr[index].push(item.content);
+            arr[index].push(item.description);
+            arr[index].push(item.publishedAt);
+            arr[index].push(item.sourceName);
+            arr[index].push(item.title);
+            arr[index].push(item.url);
+            arr[index].push(item.urlToImage);
+          });
+        //  massJSON.push(arr1)
+        // }
+        this.setState({
+          dataReceived: arr
+        }, () => {
+          console.log(`${this.state.dataReceived}`)
+        });
       });
 
     this.setState(
@@ -52,7 +100,28 @@ class App extends React.Component {
         console.log(` the state is ${this.state.querySubmitted}`);
       }
     );
-  };
+
+
+
+   if (this.state.dataReceived) {
+     console.log('Data has been received')
+    this.state.dataReceived.map((article, index) => {
+     var dateISO = new Date(article[3]);
+     var dateNormalized = dateISO.toLocaleDateString("lt-LT");
+
+     let dataToBePushed = {
+       date: dateNormalized,
+       author: article[0],
+       title: article[5]
+     };
+     console.log(this.data);
+     this.data.rows.push(dataToBePushed)
+     console.warn(this.data.rows[index])
+     // if (this.data.rows[index].title == article[5]){
+     //   index = index + 1
+     // }
+   })
+  }}
   render() {
     return (
       <div>
@@ -65,6 +134,9 @@ class App extends React.Component {
                     getNews={this.getNews}
                     querySubmitted={this.state.querySubmitted}
                   />
+                  <div style={{backgroundColor:'white', borderRadius: '6px', padding: '15px'}}>
+                  <DatatablePage tableData = {this.data} dataReceived={this.state.dataReceived}/>
+                  </div>
                 </div>
                 {this.state.querySubmitted ? <QueryWindow /> : null}
               </div>
