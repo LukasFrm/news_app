@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { MDBDataTable } from "mdbreact";
 
 class DatatablePage extends Component {
-
-
   render() {
-    return (
+    return  (
       <MDBDataTable
+        ref="table"
         striped
         bordered
         small
@@ -14,10 +13,10 @@ class DatatablePage extends Component {
         hover
         responsive
         data={this.props.tableData}
-        entriesOptions={[10, 100, 500, 1000, 2000, 5000]}
-        entries={100}
+        entriesOptions={[10, 20, 50, 100, 500, 2000, 5000]}
+        entries={20}
       />
-    );
+    )
   }
 }
 

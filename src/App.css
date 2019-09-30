@@ -7,9 +7,9 @@ body {
 }
 
 .wrapper {
-  background: linear-gradient(to right, darkcyan, #7cfc00);
+  background: #54a10a;
   min-height: 100vh;
-  height: auto;  
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,7 +17,7 @@ body {
 
 .main {
   min-height: 90vh;
-  height: auto;  
+  height: auto;
   background: #fff;
   box-shadow: 0px 13px 40px -13px rgba(0, 0, 0, 0.75);
   width: 80%;
@@ -78,6 +78,7 @@ input[type="text"] {
 
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px #2c3e50 inset;
+  box-shadow: 0 0 0 30px #2c3e50 inset;
   -webkit-text-fill-color: #fff !important;
 }
 
@@ -94,8 +95,7 @@ button {
   font-weight: 100;
 }
 .btnDelete {
-  background-color: #990000
-;
+  background-color: #990000;
 }
 .btnGetNews {
   background-color: darkcyan;
@@ -144,13 +144,17 @@ button:active {
 }
 
 .queryWindow {
+  word-break: break-word;
+  position: fixed;
+  bottom: 30%;
   display: inline-block;
   background: white;
   transition: opacity 500ms ease-out;
   box-shadow: 0px 13px 40px -13px rgba(0, 0, 0, 0.75);
   opacity: 0;
+  border: 1px solid grey;
   border-radius: 6px;
-  text-align: center;
+  text-align: left;
   -webkit-transition: opacity 2s ease-in;
   -moz-transition: opacity 2s ease-in;
   -ms-transition: opacity 2s ease-in;
@@ -158,8 +162,17 @@ button:active {
   transition: opacity 2s ease-in;
 }
 
+
+.currentPic {
+  max-width: 50%;
+}
+
 .load {
   opacity: 1;
   visibility: visible;
   transition: opacity 500ms ease-in;
+}
+
+ a, thead, tr :hover {
+cursor: pointer
 }
